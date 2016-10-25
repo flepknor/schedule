@@ -301,7 +301,10 @@ class Job(object):
         # pylint: disable=W0142
         assert self.unit in ('seconds', 'minutes', 'hours', 'days', 'weeks')
         self.period = datetime.timedelta(**{self.unit: self.interval})
-        self.next_run = datetime.datetime.now() + self.period
+        if self.next_run:
+            self.next_run+=self.period
+        else:
+            self.next_run=datetime.datetime.now()+self.period
         if self.start_day is not None:
             assert self.unit == 'weeks'
             weekdays = (
